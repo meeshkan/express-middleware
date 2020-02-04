@@ -1,4 +1,6 @@
-# express middleware
+[![CircleCI](https://circleci.com/gh/meeshkan/express-middleware.svg?style=svg)](https://circleci.com/gh/meeshkan/express-middleware)
+
+# Meeshkan express middleware
 
 Middleware to log requests and responses for `express` servers.
 
