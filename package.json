@@ -30,8 +30,5 @@
     "coverage": "yarn test --coverage",
     "coverage:upload": "codecov"
   },
-  "dependencies": {
-    "express-winston": "^4.0.2",
-    "winston": "^3.2.1"
-  }
+  "dependencies": {}
 }

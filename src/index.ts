@@ -1,17 +1,83 @@
 import { Request, Response, NextFunction } from "express";
-import expressWinston from "express-winston";
-import winston from "winston";
+import fs from "fs";
+import {
+  ISerializedRequest,
+  ISerializedResponse,
+  HTTPMethod,
+  IProtocol
+} from "unmock-types";
+import url from "url";
 interface Options {
   path: string;
 }
 
-// TODO: express only exposes getHeaders, so no way to get them as a property
-// how can we get the headers?
+type WriteCb = (error: Error | null | undefined) => void;
+type EndCb = () => void;
 
-export default (options: Options) =>
-  expressWinston.logger({
-    transports: [new winston.transports.File({ filename: options.path })],
-    format: winston.format.json(),
-    requestWhitelist:  ['url', 'headers', 'method', 'httpVersion', 'originalUrl', 'query'],
-    responseWhitelist: ['statusCode', 'body'],
-  });
+export default (options: Options) => (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const oldWrite = res.write;
+  const oldEnd = res.end;
+
+  const chunks: Buffer[] = [];
+
+  res.write = (
+    thingOne: any,
+    thingTwo?: string | WriteCb,
+    thingThree?: WriteCb
+  ) => {
+    chunks.push(Buffer.from(thingOne));
+    return oldWrite.apply(res, [
+      thingOne,
+      typeof thingTwo === "string" ? thingTwo : "utf8",
+      thingThree === undefined &&
+      thingTwo !== undefined &&
+      typeof thingTwo !== "string"
+        ? thingTwo
+        : thingThree
+    ]);
+  };
+
+  res.end = (thingOne: any, thingTwo?: string | EndCb, thingThree?: EndCb) => {
+    if (thingOne) {
+      chunks.push(Buffer.from(thingOne));
+    }
+    const body = Buffer.concat(chunks).toString("utf8");
+
+    const output: {
+      request: ISerializedRequest;
+      response: ISerializedResponse;
+    } = {
+      request: {
+        headers: req.headers,
+        host: req.hostname,
+        method: req.method as HTTPMethod,
+        path: url.parse(req.url).path || req.path,
+        pathname: url.parse(req.url).pathname || req.path,
+        query: req.query,
+        protocol: req.protocol as IProtocol,
+        body: typeof req.body === "string" ? req.body : JSON.stringify(req.body)
+      },
+      response: {
+        statusCode: res.statusCode,
+        body,
+        headers: res.getHeaders()
+      }
+    };
+    fs.appendFileSync(options.path, JSON.stringify(output) + "\n");
+    return oldEnd.apply(res, [
+      thingOne,
+      typeof thingTwo === "string" ? thingTwo : "utf8",
+      thingThree === undefined &&
+      thingTwo !== undefined &&
+      typeof thingTwo !== "string"
+        ? thingTwo
+        : thingThree
+    ]);
+  };
+
+  next();
+};
