@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/meeshkan/express-middleware.svg?style=svg)](https://circleci.com/gh/meeshkan/express-middleware)
+[![CircleCI](https://circleci.com/gh/Meeshkan/express-middleware.svg?style=svg)](https://circleci.com/gh/Meeshkan/express-middleware)
 
 # Meeshkan express middleware
 
