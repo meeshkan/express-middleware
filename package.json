@@ -6,6 +6,7 @@
   "repository": "https://github.com/meeshkan/express-middleware",
   "author": "Mike Solomon",
   "license": "MIT",
+  "private": false,
   "devDependencies": {
     "@types/express": "^4.17.2",
     "@types/jest": "^25.1.1",
