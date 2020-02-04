@@ -1,12 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import fs from "fs";
 import {
-  ISerializedRequest,
-  ISerializedResponse,
-  HTTPMethod,
-  IProtocol
-} from "unmock-types";
-import url from "url";
+  HttpMethod,
+  HttpProtocol,
+  HttpRequestBuilder,
+  HttpResponseBuilder
+} from "http-types";
+
 interface Options {
   writer: (s: string) => void;
 }
@@ -47,27 +46,21 @@ export default (options: Options) => (
     }
     const body = Buffer.concat(chunks).toString("utf8");
 
-    const output: {
-      request: ISerializedRequest;
-      response: ISerializedResponse;
-    } = {
-      request: {
-        headers: req.headers,
-        host: req.hostname,
-        method: req.method as HTTPMethod,
-        path: url.parse(req.url).path || req.path,
-        pathname: url.parse(req.url).pathname || req.path,
-        query: req.query,
-        protocol: req.protocol as IProtocol,
-        body: typeof req.body === "string" ? req.body : JSON.stringify(req.body)
-      },
-      response: {
-        statusCode: res.statusCode,
-        body,
-        headers: res.getHeaders()
-      }
-    };
-    options.writer(JSON.stringify(output));
+    const request = HttpRequestBuilder.fromPathnameAndQuery({
+      headers: req.headers as { string: string | string[] },
+      host: req.hostname,
+      method: req.method.toUpperCase() as HttpMethod,
+      pathname: req.path,
+      query: req.query,
+      protocol: req.protocol.toUpperCase() as HttpProtocol,
+      body: typeof req.body === "string" ? req.body : JSON.stringify(req.body)
+    });
+    const response = HttpResponseBuilder.from({
+      statusCode: res.statusCode,
+      body,
+      headers: res.getHeaders() as { string: string | string[] }
+    });
+    options.writer(JSON.stringify({ request, response }));
     return oldEnd.apply(res, [
       thingOne,
       typeof thingTwo === "string" ? thingTwo : "utf8",
