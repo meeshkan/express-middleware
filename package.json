@@ -1,7 +1,7 @@
 {
   "name": "@meeshkan/express-middleware",
   "version": "0.0.0",
-  "description": "Express middleware to log .jsonl files",
+  "description": "Express middleware to create .jsonl files for consumption by Meeshkan.",
   "main": "dist/index.js",
   "repository": "https://github.com/meeshkan/express-middleware",
   "author": "Mike Solomon",
