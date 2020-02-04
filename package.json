@@ -1,0 +1,37 @@
+{
+  "name": "@meeshkan/express-middleware",
+  "version": "0.0.0",
+  "description": "Express middleware to log .jsonl files",
+  "main": "dist/index.js",
+  "repository": "https://github.com/meeshkan/express-middleware",
+  "author": "Mike Solomon",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.17.2",
+    "@types/jest": "^25.1.1",
+    "@types/node": "^13.7.0",
+    "@types/supertest": "^2.0.8",
+    "codecov": "^3.6.4",
+    "express": "^4.17.1",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "supertest": "^4.0.2",
+    "ts-jest": "^25.2.0",
+    "typescript": "^3.7.5",
+    "unmock-types": "^0.3.12"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "lint:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
+    "test": "jest",
+    "prepublish": "yarn compile && yarn lint && yarn test",
+    "test:ci": "yarn run coverage --ci --maxWorkers=2  --reporters=default --reporters=jest-junit",
+    "coverage": "yarn test --coverage",
+    "coverage:upload": "codecov"
+  },
+  "dependencies": {
+    "express-winston": "^4.0.2",
+    "winston": "^3.2.1"
+  }
+}
