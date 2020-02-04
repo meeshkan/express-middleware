@@ -5,7 +5,12 @@ import middleware from "../src";
 
 test("file is written to correct path with correctly formatted content", async () => {
   const app = express();
-  app.use(middleware({ path: "foo.jsonl" }));
+  app.use(
+    middleware({
+      writer: (chunk: string) =>
+        fs.appendFileSync("foo.jsonl", chunk + "\n")
+    })
+  );
   app.get("/foo", (req, res) => res.send("Hello World!"));
   app.get("/bar", (req, res) => res.json({ hello: "world" }));
   await request(app).get("/foo");

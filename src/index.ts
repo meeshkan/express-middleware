@@ -8,7 +8,7 @@ import {
 } from "unmock-types";
 import url from "url";
 interface Options {
-  path: string;
+  writer: (s: string) => void;
 }
 
 type WriteCb = (error: Error | null | undefined) => void;
@@ -67,7 +67,7 @@ export default (options: Options) => (
         headers: res.getHeaders()
       }
     };
-    fs.appendFileSync(options.path, JSON.stringify(output) + "\n");
+    options.writer(JSON.stringify(output));
     return oldEnd.apply(res, [
       thingOne,
       typeof thingTwo === "string" ? thingTwo : "utf8",
