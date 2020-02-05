@@ -1723,6 +1723,11 @@ http-signature@~1.2.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
+http-types@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/http-types/-/http-types-0.4.0.tgz#f0cdfa7e49efd7a7a2e166a09ddcd10435ec9c84"
+  integrity sha512-C1XXJjjOK7/lK4Db322Lf9ikRifaCCZWphslsLNsNrOQsK68ylOhUk4fLIV+JU62cijJjY319xwo3c5iwl+v2A==
+
 https-proxy-agent@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-4.0.0.tgz#702b71fb5520a132a66de1f67541d9e62154d82b"
@@ -3783,11 +3788,6 @@ union-value@^1.0.0:
     get-value "^2.0.6"
     is-extendable "^0.1.1"
     set-value "^2.0.1"
-
-unmock-types@^0.3.12:
-  version "0.3.12"
-  resolved "https://registry.yarnpkg.com/unmock-types/-/unmock-types-0.3.12.tgz#999c3ed6d6939a2cac15f0dfe6df6d1c2bd211a7"
-  integrity sha512-pcRR/PQS7oGpY531uSuUtYW+HdtH9L0P4ziLb/RNLT5Blr/zVtii3zTpFl/8tY9N3nTfJp6x7TpjRFOKBpf1Mg==
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
