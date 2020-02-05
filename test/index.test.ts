@@ -23,8 +23,12 @@ const readExchanges = (jsonlFilename: string): HttpExchange[] => {
 
 test("file is written to correct path with correctly formatted content", async () => {
   const app = express();
-  app.use(middleware({ path: TEST_JSONL }));
 
+  app.use(
+    middleware({
+      writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n")
+    })
+  );
   app.get("/foo", (_, res) => res.send("Hello World!"));
   app.get("/bar", (_, res) => res.json({ hello: "world" }));
 
