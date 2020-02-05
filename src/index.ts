@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import fs from "fs";
 import {
   HttpMethod,
   HttpProtocol,
@@ -8,7 +7,7 @@ import {
 } from "http-types";
 
 interface Options {
-  path: string;
+  writer: (s: string) => void;
 }
 
 type WriteCb = (error: Error | null | undefined) => void;
@@ -61,10 +60,7 @@ export default (options: Options) => (
       body,
       headers: res.getHeaders() as { string: string | string[] }
     });
-    fs.appendFileSync(
-      options.path,
-      JSON.stringify({ request, response }) + "\n"
-    );
+    options.writer(JSON.stringify({ request, response }));
     return oldEnd.apply(res, [
       thingOne,
       typeof thingTwo === "string" ? thingTwo : "utf8",
