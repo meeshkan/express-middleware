@@ -6,12 +6,6 @@ import middleware from "../src";
 
 const TEST_JSONL = "foo.jsonl";
 
-beforeEach(() => {
-  if (fs.existsSync(TEST_JSONL)) {
-    fs.unlinkSync(TEST_JSONL);
-  }
-});
-
 const readExchanges = (jsonlFilename: string): HttpExchange[] => {
   const jsonlStr = fs.readFileSync(jsonlFilename, { encoding: "utf-8" });
   const exchanges: HttpExchange[] = [];
@@ -21,28 +15,52 @@ const readExchanges = (jsonlFilename: string): HttpExchange[] => {
   return exchanges;
 };
 
-test("file is written to correct path with correctly formatted content", async () => {
-  const app = express();
+describe("middleware", () => {
+  beforeEach(() => {
+    if (fs.existsSync(TEST_JSONL)) {
+      fs.unlinkSync(TEST_JSONL);
+    }
+  });
 
-  app.use(
-    middleware({
-      writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n")
-    })
-  );
-  app.get("/foo", (_, res) => res.send("Hello World!"));
-  app.get("/bar", (_, res) => res.json({ hello: "world" }));
+  test("writes to correct path with correctly formatted content", async () => {
+    const app = express();
 
-  await request(app).get("/foo?a=b&q=1&q=2");
-  await request(app).get("/bar");
+    app.use(
+      middleware({
+        writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n"),
+      })
+    );
+    app.get("/foo", (_, res) => res.send("Hello World!"));
+    app.get("/bar", (_, res) => res.json({ hello: "world" }));
 
-  const exchanges = readExchanges(TEST_JSONL);
+    await request(app).get("/foo?a=b&q=1&q=2");
+    await request(app).get("/bar");
 
-  expect(exchanges).toHaveLength(2);
-  expect(exchanges[0].response.statusCode).toBe(200);
-  expect(exchanges[0].request.path).toBe("/foo?a=b&q=1&q=2");
-  expect(exchanges[0].request.pathname).toBe("/foo");
-  expect(exchanges[0].request.headers.get("connection")).toEqual("close");
-  expect(exchanges[0].request.query.get("a")).toEqual("b");
-  expect(exchanges[0].request.query.getAll("q")).toEqual(["1", "2"]);
-  expect(exchanges[1].request.path).toBe("/bar");
+    const exchanges = readExchanges(TEST_JSONL);
+
+    expect(exchanges).toHaveLength(2);
+    expect(exchanges[0].response.statusCode).toBe(200);
+    expect(exchanges[0].request.path).toBe("/foo?a=b&q=1&q=2");
+    expect(exchanges[0].request.pathname).toBe("/foo");
+    expect(exchanges[0].request.headers.get("connection")).toEqual("close");
+    expect(exchanges[0].request.query.get("a")).toEqual("b");
+    expect(exchanges[0].request.query.getAll("q")).toEqual(["1", "2"]);
+    expect(exchanges[1].request.path).toBe("/bar");
+  });
+  test("does not change the response", async () => {
+    const app = express();
+
+    app.use(
+      middleware({
+        writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n"),
+      })
+    );
+    app.get("/bar", (_, res) => res.json({ hello: "world" }));
+
+    await request(app)
+      .get("/bar")
+      .expect(200, {
+        hello: "world",
+      });
+  });
 });
