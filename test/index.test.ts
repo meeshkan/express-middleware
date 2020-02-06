@@ -2,7 +2,7 @@ import fs from "fs";
 import express from "express";
 import { HttpExchangeReader, HttpExchange } from "http-types";
 import request from "supertest";
-import middleware, { localFileSystemTransport } from "../src";
+import middleware, { LocalFileSystemTransport } from "../src";
 
 const TEST_JSONL = "foo.jsonl";
 
@@ -26,7 +26,7 @@ test("file is written to correct path with correctly formatted content", async (
 
   app.use(
     middleware({
-      transports: [localFileSystemTransport(TEST_JSONL)],
+      transports: [LocalFileSystemTransport(TEST_JSONL)],
     })
   );
   app.get("/foo", (_, res) => res.send("Hello World!"));

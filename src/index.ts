@@ -19,7 +19,7 @@ export interface Options {
 type WriteCb = (error: Error | null | undefined) => void;
 type EndCb = () => void;
 
-export const localFileSystemTransport = (
+export const LocalFileSystemTransport = (
   filename: string
 ): HttpExchangeTransport => (httpExchange: HttpExchange) =>
   new Promise((resolve, reject) => {
