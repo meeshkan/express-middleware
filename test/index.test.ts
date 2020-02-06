@@ -26,7 +26,7 @@ test("file is written to correct path with correctly formatted content", async (
 
   app.use(
     middleware({
-      transports: [LocalFileSystemTransport(TEST_JSONL)],
+      transports: [LocalFileSystemTransport(TEST_JSONL)]
     })
   );
   app.get("/foo", (_, res) => res.send("Hello World!"));
