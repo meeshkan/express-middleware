@@ -27,7 +27,7 @@ describe("middleware", () => {
 
     app.use(
       middleware({
-        writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n"),
+        writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n")
       })
     );
     app.get("/foo", (_, res) => res.send("Hello World!"));
@@ -56,7 +56,7 @@ describe("middleware", () => {
 
     app.use(
       middleware({
-        writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n"),
+        writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n")
       })
     );
     app.get("/bar", (_, res) => res.json({ hello: "world" }));
@@ -64,7 +64,7 @@ describe("middleware", () => {
     await request(app)
       .get("/bar")
       .expect(200, {
-        hello: "world",
+        hello: "world"
       });
   });
 });
