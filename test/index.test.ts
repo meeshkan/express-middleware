@@ -37,14 +37,20 @@ describe("middleware", () => {
     await request(app).get("/bar");
 
     const exchanges = readExchanges(TEST_JSONL);
-
     expect(exchanges).toHaveLength(2);
-    expect(exchanges[0].response.statusCode).toBe(200);
-    expect(exchanges[0].request.path).toBe("/foo?a=b&q=1&q=2");
-    expect(exchanges[0].request.pathname).toBe("/foo");
-    expect(exchanges[0].request.headers.get("connection")).toEqual("close");
-    expect(exchanges[0].request.query.get("a")).toEqual("b");
-    expect(exchanges[0].request.query.getAll("q")).toEqual(["1", "2"]);
+
+    const firstExchange = exchanges[0];
+    expect(firstExchange.response.statusCode).toBe(200);
+    expect(firstExchange.response.body).toBe(
+      JSON.stringify({ hello: "world" })
+    );
+
+    expect(firstExchange.request.path).toBe("/foo?a=b&q=1&q=2");
+    expect(firstExchange.request.pathname).toBe("/foo");
+    expect(firstExchange.request.headers.get("connection")).toEqual("close");
+    expect(firstExchange.request.query.get("a")).toEqual("b");
+    expect(firstExchange.request.query.getAll("q")).toEqual(["1", "2"]);
+
     expect(exchanges[1].request.path).toBe("/bar");
   });
   test("does not change the response", async () => {
