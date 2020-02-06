@@ -49,10 +49,10 @@ export default (options: Options) => (
     const request = HttpRequestBuilder.fromPathnameAndQuery({
       headers: req.headers as { string: string | string[] },
       host: req.hostname,
-      method: req.method.toUpperCase() as HttpMethod,
+      method: req.method.toLowerCase() as HttpMethod,
       pathname: req.path,
       query: req.query,
-      protocol: req.protocol.toUpperCase() as HttpProtocol,
+      protocol: req.protocol.toLowerCase() as HttpProtocol,
       body: typeof req.body === "string" ? req.body : JSON.stringify(req.body)
     });
     const response = HttpResponseBuilder.from({

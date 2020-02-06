@@ -1,6 +1,6 @@
 import fs from "fs";
 import express from "express";
-import { HttpExchangeReader, HttpExchange } from "http-types";
+import { HttpExchangeReader, HttpExchange, HttpMethod } from "http-types";
 import request from "supertest";
 import middleware from "../src";
 
@@ -48,6 +48,7 @@ describe("middleware", () => {
     expect(firstExchange.request.headers.get("connection")).toEqual("close");
     expect(firstExchange.request.query.get("a")).toEqual("b");
     expect(firstExchange.request.query.getAll("q")).toEqual(["1", "2"]);
+    expect(firstExchange.request.method).toBe(HttpMethod.GET);
 
     expect(exchanges[1].request.path).toBe("/bar");
   });
