@@ -2,7 +2,7 @@ import fs from "fs";
 import express from "express";
 import { HttpExchangeReader, HttpExchange, HttpMethod } from "http-types";
 import request from "supertest";
-import middleware from "../src";
+import middleware, { LocalFileSystemTransport } from "../src";
 
 const TEST_JSONL = "foo.jsonl";
 
@@ -21,13 +21,12 @@ describe("middleware", () => {
       fs.unlinkSync(TEST_JSONL);
     }
   });
-
   test("writes to correct path with correctly formatted content", async () => {
     const app = express();
 
     app.use(
       middleware({
-        writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n")
+        transports: [LocalFileSystemTransport(TEST_JSONL)]
       })
     );
     app.get("/foo", (_, res) => res.send("Hello World!"));
@@ -57,7 +56,7 @@ describe("middleware", () => {
 
     app.use(
       middleware({
-        writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n")
+        transports: []
       })
     );
     app.get("/bar", (_, res) => res.json({ hello: "world" }));

@@ -1,25 +1,45 @@
 import { Request, Response, NextFunction } from "express";
+import * as fs from "fs";
 import {
   HttpMethod,
   HttpProtocol,
   HttpRequestBuilder,
-  HttpResponseBuilder
+  HttpResponseBuilder,
+  HttpExchange
 } from "http-types";
 
-interface Options {
-  writer: (s: string) => void;
+export type HttpExchangeTransport = (
+  httpExchange: HttpExchange
+) => Promise<void>;
+
+export interface Options {
+  transports?: HttpExchangeTransport[];
 }
 
 type WriteCb = (error: Error | null | undefined) => void;
 type EndCb = () => void;
 
-export default (options: Options) => (
+export const LocalFileSystemTransport = (
+  filename: string
+): HttpExchangeTransport => (httpExchange: HttpExchange) =>
+  new Promise((resolve, reject) => {
+    try {
+      fs.appendFileSync(filename, JSON.stringify(httpExchange) + "\n");
+      resolve();
+    } catch (err) {
+      reject(err);
+    }
+  });
+
+export default (options: Options) => async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const oldWrite = res.write;
   const oldEnd = res.end;
+
+  const transports = options.transports || [];
 
   const chunks: Buffer[] = [];
 
@@ -55,12 +75,19 @@ export default (options: Options) => (
       protocol: req.protocol.toLowerCase() as HttpProtocol,
       body: typeof req.body === "string" ? req.body : JSON.stringify(req.body)
     });
+
     const response = HttpResponseBuilder.from({
       statusCode: res.statusCode,
       body,
       headers: res.getHeaders() as { string: string | string[] }
     });
-    options.writer(JSON.stringify({ request, response }));
+
+    const exchange: HttpExchange = { request, response };
+
+    transports.forEach(async transport => {
+      await transport(exchange);
+    });
+
     return oldEnd.apply(res, [
       thingOne,
       typeof thingTwo === "string" ? thingTwo : "utf8",
