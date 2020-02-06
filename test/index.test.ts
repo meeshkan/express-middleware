@@ -41,9 +41,7 @@ describe("middleware", () => {
 
     const firstExchange = exchanges[0];
     expect(firstExchange.response.statusCode).toBe(200);
-    expect(firstExchange.response.body).toBe(
-      JSON.stringify({ hello: "world" })
-    );
+    expect(firstExchange.response.body).toBe("Hello World!");
 
     expect(firstExchange.request.path).toBe("/foo?a=b&q=1&q=2");
     expect(firstExchange.request.pathname).toBe("/foo");
