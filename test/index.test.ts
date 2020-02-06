@@ -15,9 +15,7 @@ beforeEach(() => {
 const readExchanges = (jsonlFilename: string): HttpExchange[] => {
   const jsonlStr = fs.readFileSync(jsonlFilename, { encoding: "utf-8" });
   const exchanges: HttpExchange[] = [];
-  HttpExchangeReader.fromJsonLines(jsonlStr, exchange =>
-    exchanges.push(exchange)
-  );
+  HttpExchangeReader.fromJsonLines(jsonlStr, exchange => exchanges.push(exchange));
   return exchanges;
 };
 
@@ -26,7 +24,7 @@ test("file is written to correct path with correctly formatted content", async (
 
   app.use(
     middleware({
-      writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n")
+      writer: (chunk: string) => fs.appendFileSync(TEST_JSONL, chunk + "\n"),
     })
   );
   app.get("/foo", (_, res) => res.send("Hello World!"));
