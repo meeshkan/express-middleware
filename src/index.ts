@@ -5,7 +5,7 @@ import {
   HttpProtocol,
   HttpRequestBuilder,
   HttpResponseBuilder,
-  HttpExchange
+  HttpExchange,
 } from "http-types";
 
 export type HttpExchangeTransport = (
@@ -56,7 +56,7 @@ export default (options: Options) => async (
       thingTwo !== undefined &&
       typeof thingTwo !== "string"
         ? thingTwo
-        : thingThree
+        : thingThree,
     ]);
   };
 
@@ -69,17 +69,17 @@ export default (options: Options) => async (
     const request = HttpRequestBuilder.fromPathnameAndQuery({
       headers: req.headers as { string: string | string[] },
       host: req.hostname,
-      method: req.method.toUpperCase() as HttpMethod,
+      method: req.method.toLowerCase() as HttpMethod,
       pathname: req.path,
       query: req.query,
-      protocol: req.protocol.toUpperCase() as HttpProtocol,
-      body: typeof req.body === "string" ? req.body : JSON.stringify(req.body)
+      protocol: req.protocol.toLowerCase() as HttpProtocol,
+      body: typeof req.body === "string" ? req.body : JSON.stringify(req.body),
     });
 
     const response = HttpResponseBuilder.from({
       statusCode: res.statusCode,
       body,
-      headers: res.getHeaders() as { string: string | string[] }
+      headers: res.getHeaders() as { string: string | string[] },
     });
 
     const exchange: HttpExchange = { request, response };
@@ -95,7 +95,7 @@ export default (options: Options) => async (
       thingTwo !== undefined &&
       typeof thingTwo !== "string"
         ? thingTwo
-        : thingThree
+        : thingThree,
     ]);
   };
 
