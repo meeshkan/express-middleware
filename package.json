@@ -7,14 +7,16 @@
   "author": "Meeshkan",
   "license": "MIT",
   "private": false,
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-types": "^0.5.0"
+  },
   "devDependencies": {
     "@types/express": "^4.17.2",
     "@types/jest": "^25.1.1",
     "@types/node": "^13.7.0",
     "@types/supertest": "^2.0.8",
     "codecov": "^3.6.4",
-    "express": "^4.17.1",
-    "http-types": "^0.5.0",
     "jest": "^25.1.0",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",
@@ -30,6 +32,5 @@
     "test:ci": "yarn run coverage --ci --maxWorkers=2  --reporters=default --reporters=jest-junit",
     "coverage": "yarn test --coverage",
     "coverage:upload": "codecov"
-  },
-  "dependencies": {}
+  }
 }
