@@ -22,7 +22,10 @@ const customTransport = async httpExchange => {
 // Add middleware
 app.use(
   middleware({
-    transports: [LocalFileSystemTransport("http-exchanges.jsonl"), customTransport],
+    transports: [
+      LocalFileSystemTransport("http-exchanges.jsonl"),
+      customTransport
+    ],
   })
 );
 // add routes
