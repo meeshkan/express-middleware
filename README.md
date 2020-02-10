@@ -47,3 +47,17 @@ Compile TypeScript:
 ```bash
 $ yarn compile
 ```
+
+Publish package:
+
+```bash
+$ yarn publish --access public
+```
+
+Push git tags:
+
+```bash
+$ TAG=v`cat package.json | grep version | awk 'BEGIN { FS = "\"" } { print $4 }'`
+$ git tag -a $TAG -m $TAG
+$ git push origin $TAG
+```
