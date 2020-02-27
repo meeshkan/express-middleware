@@ -50,7 +50,7 @@ export default (options: Options) => async (req: Request, res: Response, next: N
       headers: req.headers as { string: string | string[] },
       host: req.hostname,
       method: req.method.toLowerCase() as HttpMethod,
-      path: req.originalUrl,
+      path: fullPath,
       protocol: req.protocol.toLowerCase() as HttpProtocol,
       body: typeof req.body === "string" ? req.body : JSON.stringify(req.body),
     });
