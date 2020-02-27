@@ -44,12 +44,13 @@ export default (options: Options) => async (req: Request, res: Response, next: N
     }
     const body = Buffer.concat(chunks).toString("utf8");
 
-    const request = HttpRequestBuilder.fromPathnameAndQuery({
+    const fullPath = req.originalUrl;
+
+    const request = HttpRequestBuilder.fromPath({
       headers: req.headers as { string: string | string[] },
       host: req.hostname,
       method: req.method.toLowerCase() as HttpMethod,
-      pathname: req.path,
-      query: req.query,
+      path: req.originalUrl,
       protocol: req.protocol.toLowerCase() as HttpProtocol,
       body: typeof req.body === "string" ? req.body : JSON.stringify(req.body),
     });

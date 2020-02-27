@@ -86,8 +86,14 @@ describe("middleware", () => {
 
     app.use("/route", route);
 
-    await request(app).get("/route/bar");
+    await request(app).get("/route/bar?q=a");
 
     expect(exchanges).toHaveLength(1);
+
+    const exchange = exchanges[0];
+
+    expect(exchange.request.pathname).toBe("/route/bar");
+    expect(exchange.request.path).toBe("/route/bar?q=a");
+    expect(exchange.request.query.toJSON()).toEqual({ q: "a" });
   });
 });
