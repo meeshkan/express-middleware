@@ -96,4 +96,28 @@ describe("middleware", () => {
     expect(exchange.request.path).toBe("/route/bar?q=a");
     expect(exchange.request.query.toJSON()).toEqual({ q: "a" });
   });
+  test("writes response timestamp", async () => {
+    const app = express();
+
+    const exchanges: HttpExchange[] = [];
+
+    const transport = (exchange: HttpExchange) => {
+      exchanges.push(exchange);
+      return Promise.resolve();
+    };
+
+    app.use(
+      middleware({
+        transports: [transport],
+      })
+    );
+
+    await request(app).get("/foo");
+
+    expect(exchanges).toHaveLength(1);
+
+    const exchange = exchanges[0];
+
+    expect(exchange.response.timestamp).toBeInstanceOf(Date);
+  });
 });
