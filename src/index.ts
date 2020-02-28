@@ -59,6 +59,7 @@ export default (options: Options) => async (req: Request, res: Response, next: N
       statusCode: res.statusCode,
       body,
       headers: res.getHeaders() as { string: string | string[] },
+      timestamp: new Date(),
     });
 
     const exchange: HttpExchange = { request, response };
