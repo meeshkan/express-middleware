@@ -9,9 +9,7 @@ const TEST_JSONL = "foo.jsonl";
 const readExchanges = (jsonlFilename: string): HttpExchange[] => {
   const jsonlStr = fs.readFileSync(jsonlFilename, { encoding: "utf-8" });
   const exchanges: HttpExchange[] = [];
-  HttpExchangeReader.fromJsonLines(jsonlStr, exchange =>
-    exchanges.push(exchange)
-  );
+  HttpExchangeReader.fromJsonLines(jsonlStr, exchange => exchanges.push(exchange));
   return exchanges;
 };
 
@@ -26,7 +24,7 @@ describe("middleware", () => {
 
     app.use(
       middleware({
-        transports: [LocalFileSystemTransport(TEST_JSONL)]
+        transports: [LocalFileSystemTransport(TEST_JSONL)],
       })
     );
     app.get("/foo", (_, res) => res.send("Hello World!"));
@@ -56,7 +54,7 @@ describe("middleware", () => {
 
     app.use(
       middleware({
-        transports: []
+        transports: [],
       })
     );
     app.get("/bar", (_, res) => res.json({ hello: "world" }));
@@ -64,7 +62,38 @@ describe("middleware", () => {
     await request(app)
       .get("/bar")
       .expect(200, {
-        hello: "world"
+        hello: "world",
       });
+  });
+  test("correctly writes the path at routes", async () => {
+    const app = express();
+
+    const exchanges: HttpExchange[] = [];
+
+    const transport = (exchange: HttpExchange) => {
+      exchanges.push(exchange);
+      return Promise.resolve();
+    };
+
+    app.use(
+      middleware({
+        transports: [transport],
+      })
+    );
+
+    const route = express.Router();
+    route.get("/bar", (_, res) => res.json({ hello: "world" }));
+
+    app.use("/route", route);
+
+    await request(app).get("/route/bar?q=a");
+
+    expect(exchanges).toHaveLength(1);
+
+    const exchange = exchanges[0];
+
+    expect(exchange.request.pathname).toBe("/route/bar");
+    expect(exchange.request.path).toBe("/route/bar?q=a");
+    expect(exchange.request.query.toJSON()).toEqual({ q: "a" });
   });
 });
