@@ -7,6 +7,12 @@
   "author": "Meeshkan",
   "license": "MIT",
   "private": false,
+  "keywords": [
+    "express",
+    "http",
+    "http-types",
+    "typescript"
+  ],
   "dependencies": {
     "express": "^4.17.1",
     "http-types": "^0.5.0"
