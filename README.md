@@ -3,7 +3,15 @@
 
 # Meeshkan express middleware
 
-Express server middleware to log requests and responses in [http-types](https://meeshkan.github.io/http-types/) format.
+Express server middleware to log requests and responses in the [HTTP Types](https://meeshkan.github.io/http-types/) format.
+
+## Installation
+
+Install via [npm](https://www.npmjs.com/package/@meeshkanml/express-middleware):
+
+```bash
+npm install @meeshkanml/express-middleware
+```
 
 ## Usage
 
