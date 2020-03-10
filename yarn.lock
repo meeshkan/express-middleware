@@ -1722,10 +1722,10 @@ http-signature@~1.2.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-http-types@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/http-types/-/http-types-0.5.0.tgz#9e02637d2e7454e46550e2568527bb3af1dd3b40"
-  integrity sha512-miAWi7LdP3eONtxVC5Q0Co2kq2AR35JLavMtW6Pja17O4oywUL1Jctnex/qEuL98LedTfMugtGDU21ABHuEjgw==
+http-types@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/http-types/-/http-types-0.6.1.tgz#75dd6c92e4c31257d69f2863bb3c36a5a30e7c09"
+  integrity sha512-bSv8ud2IM0Kcnx0UOJLS0LHqATtetz+WNh54rlsUFLxuvwu4hSuOaALldTecGJVr8kngL+3XS7GUUMG0Ddaq/g==
 
 https-proxy-agent@^4.0.0:
   version "4.0.0"
