@@ -1,7 +1,7 @@
 {
   "name": "@meeshkanml/express-middleware",
   "version": "0.0.6",
-  "description": "Express middleware to create .jsonl files for consumption by Meeshkan.",
+  "description": "Express middleware to create .jsonl files for consumption by Mem.",
   "main": "dist/index.js",
   "repository": "https://github.com/meeshkan/express-middleware",
   "author": "Meeshkan",
